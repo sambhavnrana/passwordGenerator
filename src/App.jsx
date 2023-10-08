@@ -4,6 +4,7 @@ function App() {
   const [length, setLength] = useState(12);
   const [numberAllowed, setNumberAllowed] = useState(true);
   const [charAllowed, setCharAllowed] = useState(true);
+  const [capitalChars, setCapitalChars] = useState(true);
   const [password, setPassword] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -11,7 +12,9 @@ function App() {
 
   const passwordGenerator = useCallback(() => {
     let pass = "";
-    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let str = "abcdefghijklmnopqrstuvwxyz";
+    if (capitalChars) str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     if (numberAllowed) str += "0123456789";
     if (charAllowed) str += "!@#$%^&*-_+=[]{}~`";
 
@@ -20,7 +23,7 @@ function App() {
       pass += str.charAt(char);
     }
     setPassword(pass);
-  }, [length, numberAllowed, charAllowed]);
+  }, [length, numberAllowed, charAllowed, capitalChars]);
 
   const copyPasswordToClipboard = useCallback(() => {
     if (passwordRef.current) {
@@ -86,6 +89,17 @@ function App() {
               className="cursor-pointer accent-orange-500 "
               onChange={(e) => setLength(parseInt(e.target.value))}
             />
+          </div>
+
+          <div className="flex items-center gap-3 text-xl">
+            <input
+              id="numbers"
+              type="checkbox"
+              checked={capitalChars}
+              onChange={() => setCapitalChars((prev) => !prev)}
+              className="accent-orange-500 w-4 h-4 lg:w-6 lg:h-6"
+            />
+            <label htmlFor="numbers">Include Uppercase</label>
           </div>
 
           <div className="flex items-center gap-3 text-xl">
